@@ -1,0 +1,27 @@
+name: Docker Deployment
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Build Docker image
+      run: docker build -t omarahussein/node .
+
+    - name: Log in to Docker Hub
+      run: echo "${{ secrets['dckr_pat_16t5rK2oiBjqw0UpbZZ9C_WOwZs'] }}" | docker login -u "${{ secrets['omarahussein'] }}" --password-stdin
+
+    - name: Push Docker image to Docker Hub
+      run: docker push omarahussein/node
+
+    - name: Deploy Docker image
+      run: |
+        # Script to deploy the Docker image to your Docker app
